@@ -5,16 +5,16 @@
     {{message}}
   </div>
   {% endif %}
-  <form method="POST">
-      Twitter Username: <input class="form-control" name="username" type="text" placeholder="ex. @khanradcoder" autocomplete="off"><br>
 
   <h2>Submit</h2>
-  <form action="{{ url_for('pay') }}" method="post">
+  <form action="{{ url_for('diagnostic') }}" method="post">
+    Twitter Username: <input class="form-control" name="username" type="text" placeholder="ex. @khanradcoder" autocomplete="off"><br>
+
     <script
       src="https://checkout.stripe.com/checkout.js"
       class="stripe-button"
       data-key="{{ pub_key }}"
-      data-description="A Flask Charge"
+      data-description="SentiMeant analysis charge"
       data-amount="500"
       data-locale="auto">
     </script>
