@@ -1,3 +1,22 @@
 {% extends "base.html" %}
+{% block body %}
+{% if message != Null %}
+  <div class="alert alert-danger" role="alert">
+    {{message}}
+  </div>
+  {% endif %}
+  <form method="POST">
+      Twitter Username: <input class="form-control" name="username" type="text" placeholder="ex. @khanradcoder" autocomplete="off"><br>
 
+  <h2>Submit</h2>
+  <form action="{{ url_for('pay') }}" method="post">
+    <script
+      src="https://checkout.stripe.com/checkout.js"
+      class="stripe-button"
+      data-key="{{ pub_key }}"
+      data-description="A Flask Charge"
+      data-amount="500"
+      data-locale="auto">
+    </script>
+  </form>
 {% endblock %}
