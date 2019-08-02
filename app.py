@@ -15,17 +15,13 @@ stripe.api_key = sec_key
 
 
 def index():
-    return render_template('home.html')
-
-@app.route('/getstarted')
-def form():
-    return render_template('payment.html',pub_key=pub_key)
+    return render_template('home.html',pub_key=pub_key)
 
 @app.route('/diagnostic',methods=["POST"])
 def diagnostic():
     customer = stripe.Customer.create(email=request.form['stripeEmail'], source=request.form['stripeToken'])
     charge = stripe.Charge.create(customer=customer.id, amount=500, currency='usd',description='sentiment analysis')
-    username = request.form.get('username', type=str)
+    search_term = request.form.get('search_term', type=str)
 
     consumer_key = 'oHE7XfwvO3TekFfoqEboGn1tv'
     consumer_secret = 'Q77xcmzuA2qv2CSOHvFIBVDoAIGbVOWlEYfSQ7v9rERmsqPic4'
@@ -38,7 +34,7 @@ def diagnostic():
     api = tweepy.API(auth)
 
     data = pd.DataFrame(data=[tweet.text for tweet in
-                              tweepy.Cursor(api.search, q=username, result_type="recent",
+                              tweepy.Cursor(api.search, q=search_term, result_type="recent",
                                             include_entities=True, lang="en").items(200)], columns=['Tweets'])
     import nltk
     nltk.download('vader_lexicon')
@@ -57,7 +53,7 @@ def diagnostic():
         positive += all_sentiments[i]['pos']
         compound += all_sentiments[i]['compound']
 
-    return render_template('diagnostic.html', username=username, positive=positive, negative=negative, neutral=neutral, compound=compound)
+    return render_template('diagnostic.html', search_term=search_term, positive=positive, negative=negative, neutral=neutral, compound=compound)
 
 if __name__ == "__main__":
     app.run(debug=True)

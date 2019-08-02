@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% block body %}
-<h1>Haha lol get scammed</h1>
-<h1>Results for {{ username }}</h1>
+<h1>Results for {{ search_term }}</h1>
 <div id="piechart"></div>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -18,7 +17,7 @@ function drawChart() {
   ['Neutral', {{neutral}}]
 ]);
 
-  var options = {'title':'Sentiment Analysis of {{username}}', 'width':550, 'height':400};
+  var options = {'title':'Sentiment Analysis of {{search_term}} from Twitter Data', 'width':550, 'height':400};
   var chart = new google.visualization.PieChart(document.getElementById('piechart'));
   chart.draw(data, options);
 }

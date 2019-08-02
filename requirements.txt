@@ -1,0 +1,7 @@
+Flask==0.12.2
+Flask-Cors==3.0.3
+gunicorn==19.9.0
+stripe==2.32.0
+tweepy==3.7.0
+pandas==0.24.2
+nltk==3.4.3
