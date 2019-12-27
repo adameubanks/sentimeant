@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block body %}
+{% if message != Null %}
+  <div class="alert alert-danger" role="alert">
+    {{message}}
+  </div>
+  {% endif %}
+
+  <h1>Perform Sentiment Analysis on Twitter Data</h1><br>
+  <br><h3>It's quite simple, just input a Twitter username and press enter.</h3><br><br>
+  <form action="{{ url_for('profile') }}">
+    Twitter Username: <input class="form-control" name="search_term" type="text" placeholder="ex. 'realdonaldtrump'" autocomplete="off">
+    <button type="submit" class="btn btn-primary">Sign up</button><br>
+<!--
+    <script
+      src="https://checkout.stripe.com/checkout.js"
+      class="stripe-button"
+      data-key="{{ pub_key }}"
+      data-description="SentiMeant analysis charge"
+      data-amount="500"
+      data-locale="auto">
+    </script> -->
+  </form>
+  <h2>Want to see all the available users? <a href="#">Click Here</a> </h2>
+{% endblock %}

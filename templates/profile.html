@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>Profile for @{{ search_term }}</h1>
+<img src="{{ photo_url }}" alt="" style="border-radius: 50%;" width="150" height="150">
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawSarahChart);
+  google.charts.setOnLoadCallback(drawAnthonyChart);
+  function drawSarahChart() {
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Feeling');
+    data.addColumn('number', 'Score');
+    data.addRows([
+      ['Positive', 1],
+      ['Negative', 1],
+      ['Neutral', 2],
+      ['Compound', 2]
+    ]);
+    var options = {title:"Sentiment Analysis of {{ search_term }}'s tweets.",
+                   width:500,
+                   height:500,
+                   backgroundColor: '#fafafa',
+                 };
+    var chart = new google.visualization.PieChart(document.getElementById('sentiment'));
+    chart.draw(data, options);
+  }
+  function drawAnthonyChart() {
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Political Affiliation');
+    data.addColumn('number', 'Score');
+    data.addRows([
+      ['Liberal', 3],
+      ['Conservative', 2]
+    ]);
+    var options = {title:"Political affiliation of {{ search_term }}'s tweets.",
+                   width:500,
+                   height:500,
+                   pieHole: 0.4,
+                   backgroundColor: '#fafafa',
+                 };
+    var chart = new google.visualization.PieChart(document.getElementById('politics'));
+    chart.draw(data, options);
+  }
+</script>
+
+<table>
+  <tr>
+    <td><div id="sentiment"></div></td>
+    <td>What does this mean? @{{search_term}} probably </td>
+  </tr>
+  <tr>
+    <td>@{{search_term}} seems to .... </td>
+    <td><div id="politics" align="right"></div></td>
+  </tr>
+</table>
+
+<h2>Bias Probabilities:</h2>
+<!-- Sort by highest probability-->
+<h2>Final: Verdict (clean, etc.)</h2>
+{% endblock %}
