@@ -4,13 +4,67 @@
   <div class="alert alert-danger" role="alert">
     {{message}}
   </div>
-  {% endif %}
-
-  <h1>Perform Sentiment Analysis on Twitter Data</h1><br>
-  <br><h3>It's quite simple, just input a Twitter username and press enter.</h3><br><br>
+{% endif %}
+  <style>
+  .autocomplete {
+    /*the container must be positioned relative:*/
+    position: relative;
+    display: inline-block;
+  }
+  input {
+    border: 1px solid transparent;
+    background-color: #f1f1f1;
+    padding: 10px;
+    font-size: 16px;
+  }
+  input[type=text] {
+    background-color: #f1f1f1;
+    width: 100%;
+  }
+  input[type=submit] {
+    background-color: DodgerBlue;
+    color: #fff;
+  }
+  .autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 100%;
+    left: 0;
+    right: 0;
+  }
+  .autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
+  }
+  .autocomplete-items div:hover {
+    /*when hovering an item:*/
+    background-color: #e9e9e9;
+  }
+  .autocomplete-active {
+    /*when navigating through the items using the arrow keys:*/
+    background-color: DodgerBlue !important;
+    color: #ffffff;
+  }
+  </style>
+  <h1 align="center">Get Started</h1><br>
+  <h3 align="center">Input a twitter username to get access to sentiment analysis on that user's moods, political beliefs and potential biases.</h3>
+  <br>
   <form action="{{ url_for('profile') }}">
-    Twitter Username: <input class="form-control" name="search_term" type="text" placeholder="ex. 'realdonaldtrump'" autocomplete="off">
-    <button type="submit" class="btn btn-primary">Sign up</button><br>
+    <label>Enter a Twitter Username:</label>
+    <div class="row">
+    <div class="col-lg-10">
+      <input class="form-control form-control-lg" id="autocomplete" name="search_term" type="text" placeholder="ex. 'realdonaldtrump'" autocomplete="off">
+    </div>
+    <div class="col-lg-2">
+      <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+    </div>
+  </div>
 <!--
     <script
       src="https://checkout.stripe.com/checkout.js"
@@ -21,5 +75,78 @@
       data-locale="auto">
     </script> -->
   </form>
-  <h2>Want to see all the available users? <a href="#">Click Here</a> </h2>
+  <script type="text/javascript">
+    function autocomplete(inp, arr) {
+    var currentFocus;
+    inp.addEventListener("input", function(e) {
+        var a, b, i, val = this.value;
+        closeAllLists();
+        if (!val) { return false;}
+        currentFocus = -1;
+        a = document.createElement("DIV");
+        a.setAttribute("id", this.id + "autocomplete-list");
+        a.setAttribute("class", "autocomplete-items");
+        this.parentNode.appendChild(a);
+        for (i = 0; i < arr.length; i++) {
+          if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+            b = document.createElement("DIV");
+            b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+            b.innerHTML += arr[i].substr(val.length);
+            b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                b.addEventListener("click", function(e) {
+                inp.value = this.getElementsByTagName("input")[0].value;
+                closeAllLists();
+            });
+            a.appendChild(b);
+          }
+        }
+      });
+      inp.addEventListener("keydown", function(e) {
+          var x = document.getElementById(this.id + "autocomplete-list");
+          if (x) x = x.getElementsByTagName("div");
+          if (e.keyCode == 40) {
+            currentFocus++;
+            addActive(x);
+          } else if (e.keyCode == 38) { //up
+            currentFocus--;
+            addActive(x);
+          } else if (e.keyCode == 13) {
+            e.preventDefault();
+            if (currentFocus > -1) {
+              if (x) x[currentFocus].click();
+            }
+          }
+      });
+      function addActive(x) {
+        if (!x) return false;
+        removeActive(x);
+        if (currentFocus >= x.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = (x.length - 1);
+        x[currentFocus].classList.add("autocomplete-active");
+      }
+      function removeActive(x) {
+        for (var i = 0; i < x.length; i++) {
+          x[i].classList.remove("autocomplete-active");
+        }
+      }
+      function closeAllLists(elmnt) {
+        /*close all autocomplete lists in the document,
+        except the one passed as an argument:*/
+        var x = document.getElementsByClassName("autocomplete-items");
+        for (var i = 0; i < x.length; i++) {
+          if (elmnt != x[i] && elmnt != inp) {
+          x[i].parentNode.removeChild(x[i]);
+        }
+      }
+    }
+    /*execute a function when someone clicks in the document:*/
+    document.addEventListener("click", function (e) {
+        closeAllLists(e.target);
+    });
+    }
+
+    var current_users = ["bob","bill","joe","buford"];
+    autocomplete(document.getElementById("autocomplete"), current_users);
+  </script>
+  <!-- <h2>Want to see all the available users? <a href="#">Click Here</a> </h2> -->
 {% endblock %}

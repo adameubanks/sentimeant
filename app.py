@@ -25,10 +25,10 @@ def profile():
     # charge = stripe.Charge.create(customer=customer.id, amount=500, currency='usd',description='sentiment analysis')
     search_term = request.args['search_term']
 
-    consumer_key = 'oHE7XfwvO3TekFfoqEboGn1tv'
-    consumer_secret = 'Q77xcmzuA2qv2CSOHvFIBVDoAIGbVOWlEYfSQ7v9rERmsqPic4'
-    access_token = '2586611642-FTYXWePK0mNzMhJZIQBzArMuSli9WVXkBZrkb24'
-    access_token_secret = '70sJYhc3H86FQY1IR9TpoPsm99fDlbAnBXKNE5eNe2ooX'
+    consumer_key = ''
+    consumer_secret = ''
+    access_token = ''
+    access_token_secret = ''
 
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
