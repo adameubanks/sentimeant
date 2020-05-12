@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block body %}
+{% if url != '' %}
+<h1>Results for {{ url }}</h1>
+{% else %}
+<h1>Results For Submitted Text</h1>
+{% endif %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawPoliticalChart);
+  google.charts.setOnLoadCallback(drawSentimentChart);
+  google.charts.setOnLoadCallback(drawFeelingChart);
+
+  function drawSentimentChart() {
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Feeling');
+    data.addColumn('number', 'Score');
+    data.addRows([
+      ['Positive', {{positive}}],
+      ['Negative', {{negative}}],
+      ['Neutal', {{neutral}}]
+    ]);
+    var options = {title:"Overall Mood",
+                   width:500,
+                   height:500,
+                   backgroundColor: '#fafafa',
+                   colors: ['green','red','gray']
+                 };
+    var chart = new google.visualization.PieChart(document.getElementById('sentiment'));
+    chart.draw(data, options);
+  }
+
+  function drawPoliticalChart() {
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Political Affiliation');
+    data.addColumn('number', 'Score');
+    data.addRows([
+      ['Liberal', {{liberal}}],
+      ['Conservative', {{conservative}}]
+    ]);
+    var options = {title:"Political affiliation (experimental)",
+                   width:500,
+                   height:500,
+                   pieHole: 0.4,
+                   backgroundColor: '#fafafa',
+                 };
+    var chart = new google.visualization.PieChart(document.getElementById('politics'));
+    chart.draw(data, options);
+  }
+</script>
+<br>
+<p align="right"><a data-toggle="collapse" href="#collapse" role="button" aria-expanded="false" aria-controls="collapse"><i>See Submitted Text</i></a></p>
+<div class="collapse" id="collapse">
+  <div class="card card-body">{{text}}</div>
+</div>
+<br>
+
+<table>
+  <tr>
+    <td><div id="sentiment" align="left"></div></td>
+    <td><h3>Sentiment Analysis</h3><br>This text is more {% if negative > positive %}negative than positive.{%else%}positive than negative.{%endif%}
+      The compound score is {{compound}} on a scale from -1 to 1. A score of -1 means the text is strongly negative
+      whereas a score of 1 means the text is strongly positive.
+      <a href=""><i>Learn more about how our sentiment analysis works.</i></a></td>
+  </tr>
+  <tr>
+    <td><h3>Political Affiliation</h3><br>This text is more {% if conservative > liberal %}conservative than liberal.{%else%}liberal than conservative.{%endif%} Detecting
+      political affiliation can be a very difficult task. As such, the model is very experimental.
+        <a href=""><i>Learn more about how our political analysis works.</i></a></td>
+    <td><div id="politics" align="right"></div></td>
+  </tr>
+</table>
+<br>
+<h3>Emotion Detection</h3>
+<div class="row">
+<div class="col-sm-2">
+  <p style='font-size:100px;'>&#128545;</p><h3>Anger: {{anger}}%</h3>
+</div>
+<div class="col-sm-2">
+  <p style='font-size:100px;'>&#128561;</p><h3>Fear: {{fear}}%</h3>
+</div>
+<div class="col-sm-2">
+  <p style='font-size:100px;'>&#128513;</p><h3>Joy: {{joy}}%</h3>
+</div>
+<div class="col-sm-2">
+  <p style='font-size:100px;'>&#128525;</p><h3>Love: {{love}}%</h3>
+</div>
+<div class="col-sm-2">
+  <p style='font-size:100px;'>&#128546;</p><h3>Sadness: {{sadness}}%</h3>
+</div>
+<div class="col-sm-2">
+  <p style='font-size:100px;'>&#128562;</p><h3>Surprise: {{surprise}}%</h3>
+</div>
+</div>
+<br>
+<br>
+<h2>Bias Probabilities:</h2>
+<h2>share results</h2>
+{% endblock %}

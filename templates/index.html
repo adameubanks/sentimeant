@@ -1,45 +1,35 @@
 {% extends "base.html" %}
 {% block body %}
 <main role="main">
-
-  <!-- Main jumbotron for a primary marketing message or call to action -->
-  <div class="jumbotron">
-    <div class="container">
-      <h1 class="display-3">Welcome To SentiMeant!</h1>
-      <p>Get in-depth sentiment analysis of a user's tweets. SentiMeant goes through thousands of tweets and uses several recurrent neural networks
-      to perform analysis of a twitter user's overall mood, biases/prejudices and more.</p>
-      <p><a class="btn btn-primary btn-lg" href="{{ url_for('search') }}" role="button">Get Started</a></p>
+  <div class="container">
+    <h1 align='center'>Welcome To SentiMeant!</h1>
+    <i><p align='center'>Get in-depth sentiment analysis of text, whether it be from twitter or anywhere else</p></i>
+    <br>
+    <form action="{{ url_for('results') }}" method="post">
+      <label>Enter a URL <span class="badge badge-secondary">Beta</span></label>
+      <input class="form-control form-control-lg" name="url" type="text" placeholder="ex. https://example.com/article" autocomplete="off">
+      <br>
+      <h4 align='center'>Or</h4>
+      <br>
+      <label>Enter text:</label>
+      <textarea class="form-control form-control-lg" rows="12" name="text" placeholder="Paste text here"></textarea>
+      <br>
+      <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+    </form>
+    <br>
+    <hr>
+    <div class="row">
+      <div class="col-md-3">
+        <a href="#">View Github</a>
+      </div>
+      <div class="col-md-3">
+        <a href="#">About the developer</a>
+      </div>
+      <div class="col-md-3">
+        <a href="#">Mission</a>
+      </div>
     </div>
   </div>
-
-  <div class="container">
-    <!-- Example row of columns -->
-    <div class="row">
-      <div class="col-md-4">
-        <h2>How It Works</h2>
-        <p>SentiMeant uses python's flask library to run the site. The sentiment analysis relies on several recurrent neural networks.
-        These neural networks are based on code from academic papers and Stanford's CS230 course. This website's code, as well as
-         info and citiations about the methods and algorithms used can be found on the github link below.</p>
-        <p><a class="btn btn-secondary" href="#" role="button">View Github</a></p>
-      </div>
-      <div class="col-md-4">
-        <h2>What's Included</h2>
-        <p>Upon querying a user, SentiMeant will download around 3,000 of a user's most recent tweets. From there, analysis on a user's overall sentiment
-           (positive, negative), political leanings (conservative, liberal) and potential biases (racist, sexist, homophobic) will be graphed</p>
-           <p><a class="btn btn-secondary" href="#" role="button">See a Demo</a></p>
-      </div>
-      <div class="col-md-4">
-        <h2>Available Users</h2>
-        <p>Right now, all current US Congress members and a select group of news outlets and journalists have been analysis. If you want to add a user not
-        listed, please suggest a user in the form below. Eventually, we want this process completely automated, where SentiMeant is performing analysis
-        on all verified twitter accounts, and personal accounts are analyzed for a service charge.</p>
-        <p><a class="btn btn-secondary" href="#" role="button">Request a User</a></p>
-      </div>
-    </div>
-
-    <hr>
-
-  </div> <!-- /container -->
 
 </main>
 {% endblock %}

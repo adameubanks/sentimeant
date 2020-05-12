@@ -1,71 +1,114 @@
 from flask import Flask, render_template, request, redirect, url_for
-import stripe
-import tweepy
 import pandas as pd
+from numpy import abs
+import urllib.request
+import re
+from bs4 import BeautifulSoup
+from nltk import download, tokenize
+from nltk.corpus import wordnet
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.models import load_model
+import pickle
+
+download('vader_lexicon')
 
 app = Flask(__name__)
-
-pub_key = "pk_test_ZTlu8ZeGhxcvr013B9tXDcji008aGb26fG"
-sec_key = "sk_test_NISIDuFJvjhYaRrSXF9Yn3gd006rKr2Xd8"
-
-stripe.api_key = sec_key
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/search')
-def search():
-    return render_template('search.html',pub_key=pub_key)
+@app.route('/results', methods=['POST'])
+def results():
+    url = request.form['url']
+    if url != '':
+        soup = BeautifulSoup(urllib.request.urlopen(url).read(),"lxml")
+        html = soup.get_text().split(" ")
+        text = ""
+        download('wordnet')
+        for word in html:
+            if wordnet.synsets(word):
+                text = text + word + " "
+    else:
+        text = request.form['text']
+    print(text)
 
-@app.route('/profile')
-def profile():
-    # customer = stripe.Customer.create(email=request.form['stripeEmail'], source=request.form['stripeToken'])
-    # charge = stripe.Charge.create(customer=customer.id, amount=500, currency='usd',description='sentiment analysis')
-    search_term = request.args['search_term']
+    data = pd.DataFrame(data=[text],columns=["Text"])
+    sentiment = SentimentIntensityAnalyzer()
+    #sentiment analysis
+    all_sentiments = []
+    for index, row in data.iterrows():
+      ss = sentiment.polarity_scores(row['Text'])
+      all_sentiments.append(ss)
 
-    consumer_key = ''
-    consumer_secret = ''
-    access_token = ''
-    access_token_secret = ''
+    negative=neutral=positive=compound = 0
+    for i in range(len(all_sentiments)):
+      negative += all_sentiments[i]['neg']
+      neutral += all_sentiments[i]['neu']
+      positive += all_sentiments[i]['pos']
+      compound += all_sentiments[i]['compound']
 
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_token, access_token_secret)
+    #political bias
+    words = text.split(' ')
+    sentences = []
+    while i < len(words):
+        k = 0
+        sentence = ""
+        while k < 65:
+            if k+i >= len(words):
+                pass
+            else:
+                sentence=sentence+words[i+k]+" "
+            k+=1
+        sentences.append(sentence)
+        i+=65
 
-    api = tweepy.API(auth)
+    with open('tokenizer.pickle', 'rb') as handle:
+        tokenizer = pickle.load(handle)
 
-    # data = pd.DataFrame(data=[tweet.text for tweet in
-    #                           tweepy.Cursor(api.search, q=search_term, result_type="recent",
-    #                                         include_entities=True, lang="en").items(200)], columns=['Tweets'])
-    # import nltk
-    # nltk.download('vader_lexicon')
-    # sentiment = SentimentIntensityAnalyzer()
-    #
-    # all_sentiments = []
-    # for index, row in data.iterrows():
-    #     ss = sentiment.polarity_scores(row['Tweets'])
-    #     all_sentiments.append(ss)
-    #
-    # negative = neutral = positive = compound = 0
-    # print(len(all_sentiments))
-    # for i in range(len(all_sentiments)):
-    #     negative += all_sentiments[i]['neg']
-    #     neutral += all_sentiments[i]['neu']
-    #     positive += all_sentiments[i]['pos']
-    #     compound += all_sentiments[i]['compound']
-    user = api.get_user(search_term)
+    int2label = {
+        0: 'anger', 1: 'fear', 2: 'joy', 3: 'love', 4: 'sadness', 5: 'surprise'
+    }
+    print(len(sentences))
 
-    worse_photo_url = user.profile_image_url
-    better_photo_url = user.profile_image_url[:len(user.profile_image_url)-10]+"400x400.jpg"
-    compound = 1
-    negative = 2
-    neutral = 3
-    positive = 4
-    liberal = 0
-    conservative = 0
-    return render_template('profile.html', photo_url=better_photo_url, search_term=search_term, positive=positive,
-     negative=negative, neutral=neutral, compound=compound, liberal=liberal, conservative=conservative)
+    feeling_model = load_model('feeling_model.h5')
+    political_bias = load_model('political_bias.h5')
+    conservative=liberal = 0
+    anger=fear=joy=love=sadness=surprise = 0
+    for i in sentences:
+        sentence = tokenizer.texts_to_sequences([i])
+        sentence = pad_sequences(sentence, 65, padding='post', truncating='post')
+        p_score = political_bias.predict(sentence)
+        liberal+=p_score
+        conservative+=(1-p_score)
+
+        f_score = feeling_model.predict(sentence)
+        anger+=f_score[0][0]
+        fear+=f_score[0][1]
+        joy+=f_score[0][2]
+        love+=f_score[0][3]
+        sadness+=f_score[0][4]
+        surprise+=f_score[0][5]
+
+
+    conservative /= len(sentences)
+    liberal /= len(sentences)
+    liberal = liberal[0][0]
+    conservative = conservative[0][0]
+
+    anger /= len(sentences)
+    fear /= len(sentences)
+    joy /= len(sentences)
+    love /= len(sentences)
+    sadness /= len(sentences)
+    surprise /= len(sentences)
+
+    return render_template('results.html', text=text, url=url, positive=positive, negative=negative, neutral=neutral, compound=compound,
+    conservative=conservative, liberal=liberal*100,
+    anger=round(anger*100,1), fear=round(fear*100,1), joy=round(joy*100,1), love=round(love*100,1), sadness=round(sadness*100,1), surprise=round(surprise*100, 1))
+
 
 if __name__ == "__main__":
     app.run(debug=True)
