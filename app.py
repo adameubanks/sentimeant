@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
 import pandas as pd
 from numpy import abs
-import urllib.request
+# import urllib.request
 import re
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 from nltk import download, tokenize
-from nltk.corpus import wordnet
+# from nltk.corpus import wordnet
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
@@ -24,13 +24,14 @@ def index():
 def results():
     url = request.form['url']
     if url != '':
-        soup = BeautifulSoup(urllib.request.urlopen(url).read(),"lxml")
-        html = soup.get_text().split(" ")
-        text = ""
-        download('wordnet')
-        for word in html:
-            if wordnet.synsets(word):
-                text = text + word + " "
+        text = "url"
+        # soup = BeautifulSoup(urllib.request.urlopen(url).read(),"lxml")
+        # html = soup.get_text().split(" ")
+        # text = ""
+        # download('wordnet')
+        # for word in html:
+        #     if wordnet.synsets(word):
+        #         text = text + word + " "
     else:
         text = request.form['text']
     print(text)
