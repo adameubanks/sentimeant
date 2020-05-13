@@ -74,7 +74,7 @@ def results():
     }
     print(len(sentences))
 
-    feeling_model = load_model('feeling_model.h5')
+    # feeling_model = load_model('feeling_model.h5')
     political_bias = load_model('political_bias.h5')
     conservative=liberal = 0
     anger=fear=joy=love=sadness=surprise = 0
@@ -85,13 +85,13 @@ def results():
         liberal+=p_score
         conservative+=(1-p_score)
 
-        f_score = feeling_model.predict(sentence)
-        anger+=f_score[0][0]
-        fear+=f_score[0][1]
-        joy+=f_score[0][2]
-        love+=f_score[0][3]
-        sadness+=f_score[0][4]
-        surprise+=f_score[0][5]
+        # f_score = feeling_model.predict(sentence)
+        # anger+=f_score[0][0]
+        # fear+=f_score[0][1]
+        # joy+=f_score[0][2]
+        # love+=f_score[0][3]
+        # sadness+=f_score[0][4]
+        # surprise+=f_score[0][5]
 
 
     conservative /= len(sentences)
