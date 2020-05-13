@@ -4,8 +4,4 @@ gunicorn==19.9.0
 pandas==0.24.2
 nltk==3.4.3
 tensorflow==2.2.0
-beautifulsoup4==4.6.0
-requests==2.21.0
-urllib3==1.22
-beautifulsoup4==4.6.0
 bs4==0.0.1
