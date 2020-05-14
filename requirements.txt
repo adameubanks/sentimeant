@@ -4,3 +4,4 @@ gunicorn==19.9.0
 pandas==0.24.2
 nltk==3.4.3
 tensorflow==1.7.0
+keras==2.1.6
