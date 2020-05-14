@@ -3,3 +3,4 @@ Flask-Cors==3.0.3
 gunicorn==19.9.0
 pandas==0.24.2
 nltk==3.4.3
+keras==2.3.1
