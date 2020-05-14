@@ -7,9 +7,9 @@ import re
 from nltk import download, tokenize
 # from nltk.corpus import wordnet
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from tensorflow.python.keras.preprocessing.text import Tokenizer
-from tensorflow.python.keras.preprocessing.sequence import pad_sequences
-from tensorflow.python.keras.models import load_model
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.models import load_model
 import pickle
 
 download('vader_lexicon')
