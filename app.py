@@ -47,7 +47,7 @@ def results():
     political_bias = load_model('models/political_bias.h5')
     with open('models/politicaltokenizer.json') as f:
         data = json.load(f)
-        political_tokenizer = tf.keras.preprocessing.text.tokenizer_from_json(data)
+        political_tokenizer = preprocessing.tokenizer_from_json(data)
     political_tokenized = np.array(list(tf.keras.preprocessing.sequence.pad_sequences(political_tokenizer.texts_to_sequences(sentences), max_len, padding='post', truncating='post')))
 
 
@@ -55,7 +55,7 @@ def results():
     emotion_model = load_model('models/feeling_model.h5')
     with open('models/emotokenizer.json') as f:
         data = json.load(f)
-        emotion_tokenizer = tf.keras.preprocessing.text.tokenizer_from_json(data)
+        emotion_tokenizer = preprocessing.tokenizer_from_json(data)
     emotion_tokenized = np.array(list(tf.keras.preprocessing.sequence.pad_sequences(emotion_tokenizer.texts_to_sequences(sentences), max_len, padding='post', truncating='post')))
 
     liberal = political_bias.predict(political_tokenized)[0][0]
