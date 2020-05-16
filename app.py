@@ -5,13 +5,13 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from tensorflow.keras.models import load_model
 from models import preprocessing
 import tensorflow as tf
-# from nltk import download
+from nltk import download
 import pandas as pd
 import numpy as np
 import json
 import re
 
-# download('vader_lexicon')
+download('vader_lexicon')
 
 app = Flask(__name__)
 

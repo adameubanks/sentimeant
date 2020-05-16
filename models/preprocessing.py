@@ -2,14 +2,14 @@ import tensorflow as tf
 # from tensorflow.keras.preprocessing.sequence import pad_sequences
 # from tensorflow.keras.preprocessing.text import Tokenizer
 from nltk.corpus import stopwords, wordnet
-# from nltk import download
+from nltk import download
 from io import open
 import numpy as np
 import json
 import re
 
-# download('stopwords')
-# download('wordnet')
+download('stopwords')
+download('wordnet')
 
 #Get rid of noise from dataset
 def clean_str(string):
@@ -80,7 +80,7 @@ def tokenizer_from_json(json_string):
     index_word = {int(k): v for k, v in index_word.items()}
     word_index = json.loads(config.pop('word_index'))
 
-    tokenizer = Tokenizer(**config)
+    tokenizer = tf.keras.preprocessing.text.Tokenizer(**config)
     tokenizer.word_counts = word_counts
     tokenizer.word_docs = word_docs
     tokenizer.index_docs = index_docs
