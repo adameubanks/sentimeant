@@ -1,14 +1,14 @@
+from tensorflow.keras.preprocessing.text import Tokenizer, tokenizer_from_json
 from flask import Flask, render_template, request, redirect, url_for
-import re
-import pandas as pd
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from tensorflow.keras.models import load_model
 from models import preprocessing
 from nltk import download
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from tensorflow.keras.preprocessing.text import Tokenizer, tokenizer_from_json
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.models import load_model
-import json
+import pandas as pd
 import numpy as np
+import json
+import re
 
 download('vader_lexicon')
 
@@ -57,37 +57,21 @@ def results():
         emotion_tokenizer = tokenizer_from_json(data)
     emotion_tokenized = np.array(list(pad_sequences(emotion_tokenizer.texts_to_sequences(sentences), max_len, padding='post', truncating='post')))
 
-    conservative=liberal = 0
-    anger=fear=joy=love=sadness=surprise = 0
-    for sentence in sentences:
-        p_score = political_bias.predict(sentence)
-        liberal+=p_score
-        conservative+=(1-p_score)
+    liberal = political_bias.predict(political_tokenized)[0][0]
+    conservative = 1-liberal
 
-        f_score = emotion_model.predict(sentence)
-        anger+=f_score[0][0]
-        fear+=f_score[0][1]
-        joy+=f_score[0][2]
-        love+=f_score[0][3]
-        sadness+=f_score[0][4]
-        surprise+=f_score[0][5]
+    f_score = emotion_model.predict(emotion_tokenized)
+    anger=f_score[0][0]
+    fear=f_score[0][1]
+    joy=f_score[0][2]
+    love=f_score[0][3]
+    sadness=f_score[0][4]
+    surprise=f_score[0][5]
 
-
-    conservative /= len(sentences)
-    liberal /= len(sentences)
-    liberal = liberal[0][0]
-    conservative = conservative[0][0]
-
-    anger /= len(sentences)
-    fear /= len(sentences)
-    joy /= len(sentences)
-    love /= len(sentences)
-    sadness /= len(sentences)
-    surprise /= len(sentences)
 
     return render_template('results.html', text=text, url=url, positive=positive, negative=negative, neutral=neutral, compound=compound,
                             conservative=conservative, liberal=liberal*100, anger=round(anger*100,1), fear=round(fear*100,1), joy=round(joy*100,1),
-                             love=round(love*100,1), sadness=round(sadness*100,1), surprise=round(surprise*100, 1))
+                             love=round(love*100,1), sadness=round(sadness*100,1), surprise=round(surprise*100,1))
 
 
 if __name__ == "__main__":
