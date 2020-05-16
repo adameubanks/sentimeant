@@ -1,14 +1,15 @@
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.preprocessing.text import Tokenizer
+import tensorflow as tf
+# from tensorflow.keras.preprocessing.sequence import pad_sequences
+# from tensorflow.keras.preprocessing.text import Tokenizer
 from nltk.corpus import stopwords, wordnet
-from nltk import download
+# from nltk import download
 from io import open
 import numpy as np
 import json
 import re
 
-download('stopwords')
-download('wordnet')
+# download('stopwords')
+# download('wordnet')
 
 #Get rid of noise from dataset
 def clean_str(string):
@@ -79,7 +80,7 @@ def load_data_and_labels(positive_data_file, negative_data_file):
 def preprocessPoliticalData(dem_file,rep_file, vocab_size):
     print("Loading data...")
     x_text, y = load_data_and_labels(dem_file,rep_file)
-    tokenizer = Tokenizer(num_words=vocab_size, filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n', lower=True, split=" ", oov_token="<OOV>")
+    tokenizer = tf.keras.preprocessing.text.Tokenizer(num_words=vocab_size, filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n', lower=True, split=" ", oov_token="<OOV>")
     tokenizer.fit_on_texts(x_text)
     x_train = tokenizer.texts_to_sequences(x_text)
 
@@ -87,7 +88,7 @@ def preprocessPoliticalData(dem_file,rep_file, vocab_size):
     with open('politicaltokenizer.json', 'w', encoding='utf-8') as f:
         f.write(json.dumps(tokenizer_json, ensure_ascii=False))
 
-    x = np.array(list(pad_sequences(x_train, 50, padding='post', truncating='post')))
+    x = np.array(list(tf.keras.preprocessing.sequence.pad_sequences(x_train, 50, padding='post', truncating='post')))
 
     shuffle_indices = np.random.permutation(np.arange(len(y)))
     x_train = x[shuffle_indices]

@@ -1,16 +1,17 @@
-from tensorflow.keras.preprocessing.text import Tokenizer, tokenizer_from_json
+# from tensorflow.keras.preprocessing.text import Tokenizer, tokenizer_from_json
 from flask import Flask, render_template, request, redirect, url_for
-from tensorflow.keras.preprocessing.sequence import pad_sequences
+# from tensorflow.keras.preprocessing.sequence import pad_sequences
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from tensorflow.keras.models import load_model
 from models import preprocessing
-from nltk import download
+import tensorflow as tf
+# from nltk import download
 import pandas as pd
 import numpy as np
 import json
 import re
 
-download('vader_lexicon')
+# download('vader_lexicon')
 
 app = Flask(__name__)
 
@@ -46,16 +47,16 @@ def results():
     political_bias = load_model('models/political_bias.h5')
     with open('models/politicaltokenizer.json') as f:
         data = json.load(f)
-        political_tokenizer = tokenizer_from_json(data)
-    political_tokenized = np.array(list(pad_sequences(political_tokenizer.texts_to_sequences(sentences), max_len, padding='post', truncating='post')))
+        political_tokenizer = tf.keras.preprocessing.text.tokenizer_from_json(data)
+    political_tokenized = np.array(list(tf.keras.preprocessing.sequence.pad_sequences(political_tokenizer.texts_to_sequences(sentences), max_len, padding='post', truncating='post')))
 
 
     #emotion
     emotion_model = load_model('models/feeling_model.h5')
     with open('models/emotokenizer.json') as f:
         data = json.load(f)
-        emotion_tokenizer = tokenizer_from_json(data)
-    emotion_tokenized = np.array(list(pad_sequences(emotion_tokenizer.texts_to_sequences(sentences), max_len, padding='post', truncating='post')))
+        emotion_tokenizer = tf.keras.preprocessing.text.tokenizer_from_json(data)
+    emotion_tokenized = np.array(list(tf.keras.preprocessing.sequence.pad_sequences(emotion_tokenizer.texts_to_sequences(sentences), max_len, padding='post', truncating='post')))
 
     liberal = political_bias.predict(political_tokenized)[0][0]
     conservative = 1-liberal
