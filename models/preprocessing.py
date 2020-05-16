@@ -1,5 +1,5 @@
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.python.keras.preprocessing.sequence import pad_sequences
+from tensorflow.python.keras.preprocessing.text import Tokenizer
 from nltk.corpus import stopwords, wordnet
 from nltk import download
 from io import open
