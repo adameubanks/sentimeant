@@ -1,8 +1,8 @@
-from tensorflow.keras.preprocessing.text import Tokenizer, tokenizer_from_json
+from tensorflow.python.keras.preprocessing.text import Tokenizer, tokenizer_from_json
 from flask import Flask, render_template, request, redirect, url_for
-from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.python.preprocessing.sequence import pad_sequences
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from tensorflow.keras.models import load_model
+from tensorflow.keras.python.models import load_model
 from models import preprocessing
 from nltk import download
 import pandas as pd
