@@ -1,16 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for
-import pandas as pd
-from numpy import abs
-# import urllib.request
 import re
-# from bs4 import BeautifulSoup
-from nltk import download, tokenize
-# from nltk.corpus import wordnet
+import pandas as pd
+from models import preprocessing
+from nltk import download
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from keras.preprocessing.text import Tokenizer
-from keras.preprocessing.sequence import pad_sequences
-from keras.models import load_model
-import pickle
+from tensorflow.keras.preprocessing.text import Tokenizer, tokenizer_from_json
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.models import load_model
+import json
+import numpy as np
 
 download('vader_lexicon')
 
@@ -23,18 +21,11 @@ def index():
 @app.route('/results', methods=['POST'])
 def results():
     url = request.form['url']
-    if url != '':
-        text = "url"
-        # soup = BeautifulSoup(urllib.request.urlopen(url).read(),"lxml")
-        # html = soup.get_text().split(" ")
-        # text = ""
-        # download('wordnet')
-        # for word in html:
-        #     if wordnet.synsets(word):
-        #         text = text + word + " "
-    else:
-        text = request.form['text']
-    print(text)
+    text = request.form['text']
+
+    max_len = 50
+    cleaned_text = preprocessing.clean_str(text)
+    sentences = preprocessing.sequence_text(cleaned_text, max_len)
 
     data = pd.DataFrame(data=[text],columns=["Text"])
     sentiment = SentimentIntensityAnalyzer()
@@ -52,46 +43,34 @@ def results():
       compound += all_sentiments[i]['compound']
 
     #political bias
-    words = text.split(' ')
-    sentences = []
-    while i < len(words):
-        k = 0
-        sentence = ""
-        while k < 65:
-            if k+i >= len(words):
-                pass
-            else:
-                sentence=sentence+words[i+k]+" "
-            k+=1
-        sentences.append(sentence)
-        i+=65
+    political_bias = load_model('models/political_bias.h5')
+    with open('models/politicaltokenizer.json') as f:
+        data = json.load(f)
+        political_tokenizer = tokenizer_from_json(data)
+    political_tokenized = np.array(list(pad_sequences(political_tokenizer.texts_to_sequences(sentences), max_len, padding='post', truncating='post')))
 
-    with open('tokenizer.pickle', 'rb') as handle:
-        tokenizer = pickle.load(handle)
 
-    int2label = {
-        0: 'anger', 1: 'fear', 2: 'joy', 3: 'love', 4: 'sadness', 5: 'surprise'
-    }
-    print(len(sentences))
+    #emotion
+    emotion_model = load_model('models/feeling_model.h5')
+    with open('models/emotokenizer.json') as f:
+        data = json.load(f)
+        emotion_tokenizer = tokenizer_from_json(data)
+    emotion_tokenized = np.array(list(pad_sequences(emotion_tokenizer.texts_to_sequences(sentences), max_len, padding='post', truncating='post')))
 
-    # feeling_model = load_model('feeling_model.h5')
-    political_bias = load_model('political_bias.h5')
     conservative=liberal = 0
     anger=fear=joy=love=sadness=surprise = 0
-    for i in sentences:
-        sentence = tokenizer.texts_to_sequences([i])
-        sentence = pad_sequences(sentence, 65, padding='post', truncating='post')
+    for sentence in sentences:
         p_score = political_bias.predict(sentence)
         liberal+=p_score
         conservative+=(1-p_score)
 
-        # f_score = feeling_model.predict(sentence)
-        # anger+=f_score[0][0]
-        # fear+=f_score[0][1]
-        # joy+=f_score[0][2]
-        # love+=f_score[0][3]
-        # sadness+=f_score[0][4]
-        # surprise+=f_score[0][5]
+        f_score = emotion_model.predict(sentence)
+        anger+=f_score[0][0]
+        fear+=f_score[0][1]
+        joy+=f_score[0][2]
+        love+=f_score[0][3]
+        sadness+=f_score[0][4]
+        surprise+=f_score[0][5]
 
 
     conservative /= len(sentences)
@@ -107,8 +86,8 @@ def results():
     surprise /= len(sentences)
 
     return render_template('results.html', text=text, url=url, positive=positive, negative=negative, neutral=neutral, compound=compound,
-    conservative=conservative, liberal=liberal*100,
-    anger=round(anger*100,1), fear=round(fear*100,1), joy=round(joy*100,1), love=round(love*100,1), sadness=round(sadness*100,1), surprise=round(surprise*100, 1))
+                            conservative=conservative, liberal=liberal*100, anger=round(anger*100,1), fear=round(fear*100,1), joy=round(joy*100,1),
+                             love=round(love*100,1), sadness=round(sadness*100,1), surprise=round(surprise*100, 1))
 
 
 if __name__ == "__main__":

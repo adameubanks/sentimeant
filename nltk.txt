@@ -1,1 +1,3 @@
 vader_lexicon
+wordnet
+stopwords
