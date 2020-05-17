@@ -2,10 +2,5 @@ Flask==0.12.2
 Flask-Cors==3.0.3
 gunicorn==19.9.0
 pandas==0.24.2
-<<<<<<< HEAD
 nltk==3.4.5
 tensorflow==2.0.1
-=======
-nltk==3.4.3
-tensorflow==2.0
->>>>>>> 5f9b2932fe6ad169b9ab479b40c4ee73dcb50cce
