@@ -71,7 +71,7 @@ def results():
 
 
     return render_template('results.html', text=text, url=url, positive=positive, negative=negative, neutral=neutral, compound=compound,
-                            conservative=conservative, liberal=liberal*100, anger=round(anger*100,1), fear=round(fear*100,1), joy=round(joy*100,1),
+                            conservative=conservative*100, liberal=liberal*100, anger=round(anger*100,1), fear=round(fear*100,1), joy=round(joy*100,1),
                              love=round(love*100,1), sadness=round(sadness*100,1), surprise=round(surprise*100,1))
 
 
