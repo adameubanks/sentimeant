@@ -3,3 +3,4 @@ models/__pycache__
 models/data
 models/trainEmotionDetection.py
 models/trainPoliticalBias.py
+README.md
