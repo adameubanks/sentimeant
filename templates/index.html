@@ -1,35 +1,21 @@
 {% extends "base.html" %}
 {% block body %}
+
 <main role="main">
   <div class="container">
     <h1 align='center'>Welcome To SentiMeant!</h1>
-    <i><p align='center'>Get in-depth sentiment analysis of text, whether it be from twitter or anywhere else</p></i>
+    <i><p align='center'>Get in-depth sentiment analysis of a text</p></i>
     <br>
     <form action="{{ url_for('results') }}" method="post">
-      <label>Enter a URL <span class="badge badge-secondary">Beta</span></label>
-      <input class="form-control form-control-lg" name="url" type="text" placeholder="ex. https://example.com/article" autocomplete="off">
-      <br>
-      <h4 align='center'>Or</h4>
+      <!-- <label>Enter a URL <span class="badge badge-secondary">Beta</span></label> -->
+      <!-- <input class="form-control form-control-lg" name="url" type="text" placeholder="ex. https://example.com/article" autocomplete="off"> -->
+      <!-- <br> -->
+      <!-- <h4 align='center'>Or</h4> -->
       <br>
       <label>Enter text:</label>
       <textarea class="form-control form-control-lg" rows="12" name="text" placeholder="Paste text here"></textarea>
       <br>
       <button type="submit" class="btn btn-primary btn-lg">Submit</button>
     </form>
-    <br>
-    <hr>
-    <div class="row">
-      <div class="col-md-3">
-        <a href="#">View Github</a>
-      </div>
-      <div class="col-md-3">
-        <a href="#">About the developer</a>
-      </div>
-      <div class="col-md-3">
-        <a href="#">Mission</a>
-      </div>
-    </div>
-  </div>
-
 </main>
 {% endblock %}

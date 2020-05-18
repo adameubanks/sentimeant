@@ -11,7 +11,7 @@ import numpy as np
 import json
 import re
 
-download('vader_lexicon')
+# download('vader_lexicon')
 
 app = Flask(__name__)
 
@@ -19,9 +19,14 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
 @app.route('/results', methods=['POST'])
 def results():
-    url = request.form['url']
+    # url = request.form['url']
+    url = ''
     text = request.form['text']
 
     max_len = 50

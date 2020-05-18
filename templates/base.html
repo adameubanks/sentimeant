@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
     <link rel="stylesheet" href="/static/css/main.min.css">
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5ec2adaf5327f724"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
@@ -39,6 +40,20 @@
     <div class="col-lg-8">
       <br>
       <div id="content">{% block body %}{% endblock %}</div>
+      <br>
+      <hr>
+      <div class="row">
+        <div class="col-md-3">
+          <a href="https://github.com/KhanradCoder/sentimeant">View Github</a>
+        </div>
+        <div class="col-md-3">
+          <a href="{{ url_for('about') }}">About the developer</a>
+        </div>
+        <div class="col-md-3">
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLScBVtrGWMeLS8PxGcL7T5cblkQTsoEoLFv1wifsnm8LgitIQw/viewform?usp=sf_link">Contact</a>
+        </div>
+      </div>
+    </div>
     </div>
     <div class="col-lg-2"></div>
   </div>

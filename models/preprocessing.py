@@ -8,7 +8,7 @@ import numpy as np
 import json
 import re
 
-download('stopwords')
+# download('stopwords')
 download('wordnet')
 
 #Get rid of noise from dataset

@@ -55,18 +55,21 @@
   <div class="card card-body">{{text}}</div>
 </div>
 <br>
-
+{% if text.split(' ') |length < 100 %}
+<div class="alert alert-warning" role="alert">The text you submitted is very short. The predictions are more likely to be innacurate</div>
+{% endif %}
 <table>
   <tr>
     <td><div id="sentiment" align="left"></div></td>
     <td><h3>Sentiment Analysis</h3><br>This text is more {% if negative > positive %}negative than positive.{%else%}positive than negative.{%endif%}
-      The compound score is {{compound}} on a scale from -1 to 1. A score of -1 means the text is strongly negative
-      whereas a score of 1 means the text is strongly positive.
+      <b>The compound score is {{compound}}</b> on a scale from -1 to 1. A score of -1 means the text is strongly negative
+      whereas a score of 1 means the text is strongly positive. <b>Strong compound scores result in a less confident political affiliation prediction.</b>
       <a href=""><i>Learn more about how our sentiment analysis works.</i></a></td>
   </tr>
   <tr>
-    <td><h3>Political Affiliation</h3><br>This text is more {% if conservative > liberal %}conservative than liberal.{%else%}liberal than conservative.{%endif%} Detecting
-      political affiliation can be a very difficult task. As such, the model is very experimental.
+    <td><h3>Political Affiliation</h3><br>This text is more {% if conservative > liberal %}conservative than liberal.{%else%}liberal than conservative.{%endif%}
+      Detecting political affiliation can be a very difficult task. As such, the model is very experimental. <b>Short text or text with a high compound
+      score will likely result in an inaccurate predicton</b>
         <a href=""><i>Learn more about how our political analysis works.</i></a></td>
     <td><div id="politics" align="right"></div></td>
   </tr>
@@ -95,6 +98,6 @@
 </div>
 <br>
 <br>
-<h2>Bias Probabilities:</h2>
-<h2>share results</h2>
+<h2>Have a question or suggestion?
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLScBVtrGWMeLS8PxGcL7T5cblkQTsoEoLFv1wifsnm8LgitIQw/viewform?usp=sf_link">Contact the developer</a></h2>
 {% endblock %}
