@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 import json
 import re
+import urllib.request
 
 # download('vader_lexicon')
 
@@ -25,13 +26,17 @@ def about():
 
 @app.route('/results', methods=['POST'])
 def results():
-    # url = request.form['url']
-    url = ''
-    text = request.form['text']
+    url = request.form['url']
+    if url != "":
+        with urllib.request.urlopen(url) as address:
+            text = address.read().decode('utf-8')
+        text = re.sub(r'<.*?>', '', text)
+    else:
+        text = request.form['text']
 
     max_len = 50
-    cleaned_text = preprocessing.clean_str(text)
-    sentences = preprocessing.sequence_text(cleaned_text, max_len)
+    text = preprocessing.clean_str(text)
+    sentences = preprocessing.sequence_text(text, max_len)
 
     data = pd.DataFrame(data=[text],columns=["Text"])
     sentiment = SentimentIntensityAnalyzer()
