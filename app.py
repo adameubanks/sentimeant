@@ -26,7 +26,7 @@ def about():
 
 @app.route('/results', methods=['POST'])
 def results():
-    url = request.form['url']
+    url = '' #request.form['url']
     if url != "":
         with urllib.request.urlopen(url) as address:
             text = address.read().decode('utf-8')
