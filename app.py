@@ -33,6 +33,7 @@ def results():
         text = re.sub(r'<.*?>', '', text)
     else:
         text = request.form['text']
+    # url = request.form['url']
 
     max_len = 50
     text = preprocessing.clean_str(text)
