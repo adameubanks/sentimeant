@@ -1,8 +1,6 @@
-import tensorflow as tf
-# from tensorflow.keras.preprocessing.sequence import pad_sequences
-# from tensorflow.keras.preprocessing.text import Tokenizer
 from nltk.corpus import stopwords, wordnet
 from nltk import download
+import tensorflow as tf
 from io import open
 import numpy as np
 import json
@@ -124,5 +122,4 @@ def preprocessPoliticalData(dem_file,rep_file, vocab_size):
     y_train = y[shuffle_indices]
 
     del x, y
-
     return x_train, y_train

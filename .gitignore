@@ -1,2 +1,3 @@
 models/data/emotion/glove.6B.100d.txt
+models/data/toxicity
 models/__pycache__
