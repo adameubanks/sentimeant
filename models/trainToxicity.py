@@ -1,12 +1,13 @@
-import tensorflow as tf
+from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.layers import Dense, Input
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.models import Model
-from tensorflow.keras.callbacks import ModelCheckpoint
+import tensorflow as tf
+import preprocessing
 import transformers
 import pandas as pd
-from tokenizers import BertWordPieceTokenizer
 import numpy as np
+
 def fast_encode(texts, tokenizer, chunk_size=256, maxlen=512):
     """
     Tokenize text
@@ -45,13 +46,6 @@ AUTO = tf.data.experimental.AUTOTUNE
 EPOCHS = 3
 BATCH_SIZE = 32 * strategy.num_replicas_in_syn
 MAX_LEN = 192
-
-# First load the real tokenizer
-tokenizer = transformers.DistilBertTokenizer.from_pretrained('distilbert-base-multilingual-cased')
-# Save the loaded tokenizer locally
-tokenizer.save_pretrained('.')
-# Reload it with the huggingface tokenizers library
-fast_tokenizer = BertWordPieceTokenizer('vocab.txt', lowercase=True)
 
 DATA_PATH = "data/toxicity"
 
@@ -140,6 +134,3 @@ plt.ylabel('Accuracy')
 plt.xlabel('Epoch')
 plt.legend(['Train'], loc='upper left')
 plt.show()
-
-sub['toxic'] = model.predict(test_dataset, verbose=1)
-sub.to_csv('submission.csv', index=False)

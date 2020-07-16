@@ -5,9 +5,9 @@ https://colab.research.google.com/drive/1KPd6e6YkTPJQkNRhvYsZCM6YJZ8RkiIu
 from tensorflow.keras.preprocessing.text import Tokenizer, tokenizer_from_json
 from tensorflow.keras import regularizers, initializers, optimizers, callbacks
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+from sklearn.preprocessing import LabelBinarizer
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import *
-from sklearn.preprocessing import LabelBinarizer
 import preprocessing
 import numpy as np
 import pickle

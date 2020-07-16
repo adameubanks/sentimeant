@@ -87,6 +87,17 @@ def tokenizer_from_json(json_string):
 
     return tokenizer
 
+def tokenizeToxicity(file, vocab_size):
+    tokenizer = tf.keras.preprocessing.text.Tokenizer(num_words=vocab_size, filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n', lower=True, split=" ", oov_token="<OOV>")
+    tokenizer.fit_on_texts(file)
+    tokenized_file = tokenizer.texts_to_sequences(file)
+    tokenizer_json = tokenizer.to_json()
+    with open('toxictokenizer.json', 'w', encoding='utf-8') as f:
+        f.write(json.dumps(tokenizer_json, ensure_ascii=False))
+
+    tokenized_padded_file = np.array(list(tf.keras.preprocessing.sequence.pad_sequences(tokenized_file, 50, padding='post', truncating='post')))
+    return tokenized_padded_file
+
 #Political Bias Stuff - modified from https://github.com/icoen/CS230P/blob/master/RNN/data_helpers2.py
 def load_data_and_labels(positive_data_file, negative_data_file):
     positive_examples = list(open(positive_data_file, "r", encoding='utf-8').readlines())
