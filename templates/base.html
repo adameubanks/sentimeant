@@ -23,6 +23,8 @@
     <script src="https://coreui.io/docs/assets/js/spin.min.js"></script>
     <script src="https://coreui.io/docs/assets/js/ladda.min.js"></script>
     <script src="https://coreui.io/docs/assets/js/loading-buttons.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-81868222-5"></script>
@@ -42,6 +44,7 @@
   <a class="navbar-brand" href="/">
     <img src="/static/sentimeantlogo.png" width="200" height="90" alt="beta">
   </a>
+  <script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Buy me a donut', '#29abe0', 'F1F01XMM0');kofiwidget2.draw();</script>
   </nav>
 
   <div class="container-fluid">
@@ -54,14 +57,17 @@
       <hr>
       <div class="row">
         <div class="col-md-3">
-          <a href="https://github.com/KhanradCoder/sentimeant" target="_blank">View Github</a>
+          <a href="https://github.com/KhanradCoder/sentimeant" target="_blank">View the Github</a>
         </div>
         <div class="col-md-3">
           <a href="{{ url_for('about') }}">About the developer</a>
         </div>
         <div class="col-md-3">
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLScBVtrGWMeLS8PxGcL7T5cblkQTsoEoLFv1wifsnm8LgitIQw/viewform?usp=sf_link"
+          <a href="mailto:akhanrade@gmail.com"
           target="_blank">Contact</a>
+        </div>
+        <div class="col-md-3">
+          <a href="{{ url_for('howitworks') }}">How it works</a>
         </div>
       </div>
     </div>
