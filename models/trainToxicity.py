@@ -20,7 +20,7 @@ tpu_strategy = tf.distribute.experimental.TPUStrategy(tpu)
 dataset = pd.read_csv("../input/jigsaw-unintended-bias-in-toxicity-classification/train.csv")
 x = dataset["comment_text"]
 y = dataset["target"]
-max_len = 40
+max_len = 50
 vocab = 50000
 
 def tokenizeToxicity(file, vocab_size):

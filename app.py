@@ -65,13 +65,20 @@ def results():
         political_tokenizer = preprocessing.tokenizer_from_json(data)
     political_tokenized = np.array(list(tf.keras.preprocessing.sequence.pad_sequences(political_tokenizer.texts_to_sequences(sentences), max_len, padding='post', truncating='post')))
 
-
     #emotion
     emotion_model = load_model('models/feeling_model.h5')
     with open('models/emotokenizer.json') as f:
         data = json.load(f)
         emotion_tokenizer = preprocessing.tokenizer_from_json(data)
     emotion_tokenized = np.array(list(tf.keras.preprocessing.sequence.pad_sequences(emotion_tokenizer.texts_to_sequences(sentences), max_len, padding='post', truncating='post')))
+
+    #toxicity
+    toxicity = load_model('models/toxicity.h5')
+    with open('models/toxictokenizer.json') as f:
+        data = json.load(f)
+        toxicity_tokenizer = preprocessing.tokenizer_from_json(data)
+    toxicity_tokenized = np.array(list(tf.keras.preprocessing.sequence.pad_sequences(political_tokenizer.texts_to_sequences(sentences), max_len, padding='post', truncating='post')))
+
 
     liberal = political_bias.predict(political_tokenized)[0][0]
     conservative = 1-liberal
@@ -84,10 +91,11 @@ def results():
     sadness=f_score[0][4]
     surprise=f_score[0][5]
 
+    toxicity = toxicity.predict(toxicity_tokenized)[0][0]
 
     return render_template('results.html', text=text, url=url, positive=positive, negative=negative, neutral=neutral, compound=compound,
                             conservative=conservative*100, liberal=liberal*100, anger=round(anger*100,1), fear=round(fear*100,1), joy=round(joy*100,1),
-                             love=round(love*100,1), sadness=round(sadness*100,1), surprise=round(surprise*100,1))
+                             love=round(love*100,1), sadness=round(sadness*100,1), surprise=round(surprise*100,1), toxicity=round(toxicity*100,1))
 
 
 if __name__ == "__main__":

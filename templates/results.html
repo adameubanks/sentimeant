@@ -49,6 +49,27 @@
     chart.draw(data, options);
   }
 </script>
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['gauge']});
+  google.charts.setOnLoadCallback(drawToxicChart);
+
+  function drawToxicChart() {
+    var data = google.visualization.arrayToDataTable([
+      ['Label', 'Value'],
+      ['', {{toxicity}}],
+    ]);
+    var options = {
+      width: 500, height: 200,
+      greenFrom: 0, greenTo: 10,
+      redFrom: 25, redTo: 75,
+      yellowFrom:10, yellowTo: 25,
+      purpleFrom:80, purpleTo:100,
+      minorTicks: 5
+    };
+    var chart = new google.visualization.Gauge(document.getElementById('toxic'));
+    chart.draw(data, options);
+  }
+</script>
 <br>
 <p align="right"><a data-toggle="collapse" href="#collapse" role="button" aria-expanded="false" aria-controls="collapse"><i>See Submitted Text</i></a></p>
 <div class="collapse" id="collapse">
@@ -73,7 +94,15 @@
         <a href=""><i>Learn more about how our political analysis works.</i></a></td>
     <td><div id="politics" align="right"></div></td>
   </tr>
+  <tr>
+    <td><div id="toxic" align="left"></div></td>
+    <td><h3>Toxicity Level</h3><br>This text has a toxicity score of <b>{{toxicity}} out of a possible 100.</b> The arrows indicate how bad a particular score is.
+    To learn more about how this model was trained, check out <a href="">this kaggle competition where the data and inspiration for this project came from.</a>
+    There are a lot of additional dimensions in the dataset. If you want to perform more complex analysis, contact the developer</td>
+  </tr>
 </table>
+<br>
+<br>
 <br>
 <h3>Emotion Detection</h3>
 <div class="row">
@@ -98,6 +127,8 @@
 </div>
 <br>
 <br>
-<h2>Have a question or suggestion?
-  <a href="https://docs.google.com/forms/d/e/1FAIpQLScBVtrGWMeLS8PxGcL7T5cblkQTsoEoLFv1wifsnm8LgitIQw/viewform?usp=sf_link">Contact the developer</a></h2>
+<div class="alert alert-info" role="alert"><h2>Thank you for checking out SentiMeant! Due to browser limits, the models used on SentiMeant are much smaller and less accurate than they could be.
+  If you want to use a more accurate version of SentiMeant or process a larger corpora, (i.e twitter profile, web scraping),
+  <a href="mailto:akhanrade@gmail.com" style="color:#ffe108">contact the developer</a> for a quote.</h2>
+</div>
 {% endblock %}

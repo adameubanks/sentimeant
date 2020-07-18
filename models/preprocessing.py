@@ -26,11 +26,11 @@ def clean_str(string):
     string = re.sub(r"\s{2,}", " ", string)
 
     word_list = string.split(' ')
-    string = ""
-    for word in word_list:
-        if word not in stopwords.words('english'):
-            if wordnet.synsets(word):
-                string = string + word + " "
+    # string = ""
+    # for word in word_list:
+    #     if word not in stopwords.words('english'):
+    #         if wordnet.synsets(word):
+    #             string = string + word + " "
     return string.strip().lower()
 
 #For turning long text into sentences to put into each model
