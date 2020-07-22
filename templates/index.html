@@ -20,6 +20,14 @@
       <label>Enter text:</label>
       <textarea id="textarea" class="form-control form-control-lg" maxlength="500000" rows="12" name="text" placeholder="Paste text here."></textarea>
       <br>
+      <select class="form-control form-control-lg" name="model_type" required="true">
+        <option disabled selected value>Select Model</option>
+        <option value="political">Political Bias</option>
+        <option value="polarity">Polarity</option>
+        <option value="emotion">Emotion</option>
+        <option value="toxicity">Toxicity</option>
+      </select>
+      <br>
       <button type="submit" class="btn btn-success btn-ladda-progress" data-style="expand-right">Submit</button>
     </form>
 </main>

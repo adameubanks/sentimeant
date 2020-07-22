@@ -6,70 +6,6 @@
 <h1>Results For Submitted Text</h1>
 {% endif %}
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-  google.charts.load('current', {'packages':['corechart']});
-  google.charts.setOnLoadCallback(drawPoliticalChart);
-  google.charts.setOnLoadCallback(drawSentimentChart);
-  google.charts.setOnLoadCallback(drawFeelingChart);
-
-  function drawSentimentChart() {
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Feeling');
-    data.addColumn('number', 'Score');
-    data.addRows([
-      ['Positive', {{positive}}],
-      ['Negative', {{negative}}],
-      ['Neutral', {{neutral}}]
-    ]);
-    var options = {title:"Overall Mood",
-                   width:500,
-                   height:500,
-                   backgroundColor: '#fafafa',
-                   colors: ['green','red','gray']
-                 };
-    var chart = new google.visualization.PieChart(document.getElementById('sentiment'));
-    chart.draw(data, options);
-  }
-
-  function drawPoliticalChart() {
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Political Affiliation');
-    data.addColumn('number', 'Score');
-    data.addRows([
-      ['Liberal', {{liberal}}],
-      ['Conservative', {{conservative}}]
-    ]);
-    var options = {title:"Political affiliation (experimental)",
-                   width:500,
-                   height:500,
-                   pieHole: 0.4,
-                   backgroundColor: '#fafafa',
-                 };
-    var chart = new google.visualization.PieChart(document.getElementById('politics'));
-    chart.draw(data, options);
-  }
-</script>
-<script type="text/javascript">
-  google.charts.load('current', {'packages':['gauge']});
-  google.charts.setOnLoadCallback(drawToxicChart);
-
-  function drawToxicChart() {
-    var data = google.visualization.arrayToDataTable([
-      ['Label', 'Value'],
-      ['', {{toxicity}}],
-    ]);
-    var options = {
-      width: 500, height: 200,
-      greenFrom: 0, greenTo: 10,
-      redFrom: 25, redTo: 75,
-      yellowFrom:10, yellowTo: 25,
-      purpleFrom:80, purpleTo:100,
-      minorTicks: 5
-    };
-    var chart = new google.visualization.Gauge(document.getElementById('toxic'));
-    chart.draw(data, options);
-  }
-</script>
 <br>
 <p align="right"><a data-toggle="collapse" href="#collapse" role="button" aria-expanded="false" aria-controls="collapse"><i>See Submitted Text</i></a></p>
 <div class="collapse" id="collapse">
@@ -77,54 +13,134 @@
 </div>
 <br>
 {% if text.split(' ') |length < 100 %}
-<div class="alert alert-warning" role="alert">The text you submitted is very short. The predictions are more likely to be innacurate</div>
+<div class="alert alert-warning text-dark" role="alert">
+  The text you submitted is very short. The predictions are more likely to be innacurate.
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
 {% endif %}
 <table>
+  {% if model=='polarity' %}
   <tr>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawSentimentChart);
+      function drawSentimentChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Feeling');
+        data.addColumn('number', 'Score');
+        data.addRows([
+          ['Positive', {{positive}}],
+          ['Negative', {{negative}}],
+          ['Neutral', {{neutral}}]
+        ]);
+        var options = {title:"Overall Mood",
+                       width:500,
+                       height:500,
+                       backgroundColor: '#fafafa',
+                       colors: ['green','red','gray']
+                     };
+        var chart = new google.visualization.PieChart(document.getElementById('sentiment'));
+        chart.draw(data, options);
+      }
+    </script>
     <td><div id="sentiment" align="left"></div></td>
     <td><h3>Sentiment Analysis</h3><br>This text is more {% if negative > positive %}negative than positive.{%else%}positive than negative.{%endif%}
       <b>The compound score is {{compound}}</b> on a scale from -1 to 1. A score of -1 means the text is strongly negative
       whereas a score of 1 means the text is strongly positive. <b>Strong compound scores result in a less confident political affiliation prediction.</b>
       <a href=""><i>Learn more about how our sentiment analysis works.</i></a></td>
   </tr>
+  {% endif %}
+
+  {% if model=='political' %}
   <tr>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawPoliticalChart);
+      function drawPoliticalChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Political Affiliation');
+        data.addColumn('number', 'Score');
+        data.addRows([
+          ['Liberal', {{liberal}}],
+          ['Conservative', {{conservative}}]
+        ]);
+        var options = {title:"Political affiliation (experimental)",
+                       width:500,
+                       height:500,
+                       pieHole: 0.4,
+                       backgroundColor: '#fafafa',
+                     };
+        var chart = new google.visualization.PieChart(document.getElementById('politics'));
+        chart.draw(data, options);
+      }
+    </script>
     <td><h3>Political Affiliation</h3><br>This text is more {% if conservative > liberal %}conservative than liberal.{%else%}liberal than conservative.{%endif%}
       Detecting political affiliation can be a very difficult task. As such, the model is very experimental. <b>Short text or text with a high compound
       score will likely result in an inaccurate predicton</b>
         <a href=""><i>Learn more about how our political analysis works.</i></a></td>
     <td><div id="politics" align="right"></div></td>
   </tr>
+  {% endif %}
+
+  {% if model=='toxicity' %}
   <tr>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawToxicChart);
+
+      function drawToxicChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['', {{toxicity}}],
+        ]);
+        var options = {
+          width: 500, height: 200,
+          greenFrom: 0, greenTo: 10,
+          redFrom: 25, redTo: 75,
+          yellowFrom:10, yellowTo: 25,
+          purpleFrom:80, purpleTo:100,
+          minorTicks: 5
+        };
+        var chart = new google.visualization.Gauge(document.getElementById('toxic'));
+        chart.draw(data, options);
+      }
+    </script>
     <td><div id="toxic" align="left"></div></td>
     <td><h3>Toxicity Level</h3><br>This text has a toxicity score of <b>{{toxicity}} out of a possible 100.</b> The arrows indicate how bad a particular score is.
     To learn more about how this model was trained, check out <a href="">this kaggle competition where the data and inspiration for this project came from.</a>
     There are a lot of additional dimensions in the dataset. If you want to perform more complex analysis, contact the developer</td>
   </tr>
+  {% endif %}
 </table>
+
+{% if model=='emotion' %}
+  <h3>Emotion Detection</h3>
+  <div class="row">
+    <div class="col-sm-2">
+      <p style='font-size:100px;'>&#128545;</p><h3>Anger: {{anger}}%</h3>
+    </div>
+    <div class="col-sm-2">
+      <p style='font-size:100px;'>&#128561;</p><h3>Fear: {{fear}}%</h3>
+    </div>
+    <div class="col-sm-2">
+      <p style='font-size:100px;'>&#128513;</p><h3>Joy: {{joy}}%</h3>
+    </div>
+    <div class="col-sm-2">
+      <p style='font-size:100px;'>&#128525;</p><h3>Love: {{love}}%</h3>
+    </div>
+    <div class="col-sm-2">
+      <p style='font-size:100px;'>&#128546;</p><h3>Sadness: {{sadness}}%</h3>
+    </div>
+    <div class="col-sm-2">
+      <p style='font-size:100px;'>&#128562;</p><h3>Surprise: {{surprise}}%</h3>
+    </div>
+  </div>
+{% endif %}
 <br>
 <br>
-<br>
-<h3>Emotion Detection</h3>
-<div class="row">
-<div class="col-sm-2">
-  <p style='font-size:100px;'>&#128545;</p><h3>Anger: {{anger}}%</h3>
-</div>
-<div class="col-sm-2">
-  <p style='font-size:100px;'>&#128561;</p><h3>Fear: {{fear}}%</h3>
-</div>
-<div class="col-sm-2">
-  <p style='font-size:100px;'>&#128513;</p><h3>Joy: {{joy}}%</h3>
-</div>
-<div class="col-sm-2">
-  <p style='font-size:100px;'>&#128525;</p><h3>Love: {{love}}%</h3>
-</div>
-<div class="col-sm-2">
-  <p style='font-size:100px;'>&#128546;</p><h3>Sadness: {{sadness}}%</h3>
-</div>
-<div class="col-sm-2">
-  <p style='font-size:100px;'>&#128562;</p><h3>Surprise: {{surprise}}%</h3>
-</div>
-</div>
+<a href="{{ url_for('index') }}" type="button" class="btn btn-primary btn-lg btn-block">Use Another Model</a>
 <br>
 <br>
 <div class="alert alert-info" role="alert"><h2>Thank you for checking out SentiMeant! Due to browser limits, the models used on SentiMeant are much smaller and less accurate than they could be.
