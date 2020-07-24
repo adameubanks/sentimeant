@@ -49,7 +49,7 @@
     <td><h3>Sentiment Analysis</h3><br>This text is more {% if negative > positive %}negative than positive.{%else%}positive than negative.{%endif%}
       <b>The compound score is {{compound}}</b> on a scale from -1 to 1. A score of -1 means the text is strongly negative
       whereas a score of 1 means the text is strongly positive. <b>Strong compound scores result in a less confident political affiliation prediction.</b>
-      <a href=""><i>Learn more about how our sentiment analysis works.</i></a></td>
+      <a href="{{ url_for('howitworks') }}"><i>Learn more about how our sentiment analysis works.</i></a></td>
   </tr>
   {% endif %}
 
@@ -79,7 +79,7 @@
     <td><h3>Political Affiliation</h3><br>This text is more {% if conservative > liberal %}conservative than liberal.{%else%}liberal than conservative.{%endif%}
       Detecting political affiliation can be a very difficult task. As such, the model is very experimental. <b>Short text or text with a high compound
       score will likely result in an inaccurate predicton</b>
-        <a href=""><i>Learn more about how our political analysis works.</i></a></td>
+        <a href="{{ url_for('howitworks') }}"><i>Learn more about how our political analysis works.</i></a></td>
     <td><div id="politics" align="right"></div></td>
   </tr>
   {% endif %}
@@ -109,7 +109,7 @@
     </script>
     <td><div id="toxic" align="left"></div></td>
     <td><h3>Toxicity Level</h3><br>This text has a toxicity score of <b>{{toxicity}} out of a possible 100.</b> The arrows indicate how bad a particular score is.
-    To learn more about how this model was trained, check out <a href="">this kaggle competition where the data and inspiration for this project came from.</a>
+    To learn more about how this model was trained, check out <a href="https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification">this kaggle competition where the data and inspiration for this project came from.</a>
     There are a lot of additional dimensions in the dataset. If you want to perform more complex analysis, contact the developer</td>
   </tr>
   {% endif %}

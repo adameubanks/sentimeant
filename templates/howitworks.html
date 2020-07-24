@@ -1,9 +1,54 @@
 {% extends "base.html" %}
 {% block body %}
-<h1>This page is currently under construction.</h1>
+<h1 class="display-3"><b>How It Works</b></h1>
 <br>
-<h2>I am working on being more transparent on the algorithms. For now, check out this video where I go over how SentiMeant works.</h2>
+<h2>At SentiMeant, we value transparency. All of the code for training each model is available on
+  <a href="https://github.com/KhanradCoder/sentimeant/tree/master/models" target="_blank">github.</a> You can see a short video on how I created
+  SentiMeant below:</h2>
 <br>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/liTgn4xCMMw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+<br>
+<br>
+<h1>Polarity Model</h1>
+<h2>The polarity model is the simpliest model on SentiMeant.
+  SentiMeant uses a library called NLTK to break up each submitted word and assign it a score of how positive/negative it is.
+  All of these scores are combined and averaged for a total polarity score.
+  This method is called a lexiconal approach.
+  Scores for each word come from the vader lexicon.
+  Accuracy is at the same level as human raters.</h2>
+<br>
+<br>
+<h1>Political Bias Model</h1>
+<h2>The political bias model uses a bidirectional GRU network with keras default word embeddings.
+  The data comes from <a href="https://www.kaggle.com/khanradcoder/political-tweets">tweets</a> of conservative and liberal US politicians.
+  The accuracy of this model is around 76%.
+  This model was adapted from a Stanford class project. You can read the original paper <a href="https://cs230.stanford.edu/projects_fall_2018/reports/12449209.pdf">here.</a>
+  You can see the code for training the model <a href="https://github.com/KhanradCoder/sentimeant/blob/master/models/trainPoliticalBias.py">here.</a>
+</h2>
+<br>
+<br>
+<h1>Emotion Model</h1>
+<h2>The emotion model uses glove word embeddings with an LSTM model.
+  The code and data was adapted from <a href="https://colab.research.google.com/drive/1KPd6e6YkTPJQkNRhvYsZCM6YJZ8RkiIu">this colab notebook.</a>
+  Accuracy is around 85%, which is much higher than I can do personally.
+</h2>
+<br>
+<br>
+<h1>Toxicity Model</h1>
+<h2>This model was the hardest to implement.
+  The model was trained on data from <a href="https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification">this kaggle competition</a>
+  You can view the code used to train the model <a href="https://github.com/KhanradCoder/sentimeant/blob/master/models/trainToxicity.py">here.</a>
+  Accuracy is around 70%.
+</h2>
+<br>
+<br>
+<h1>Conclusion</h1>
+<h2>All of the models used on SentiMeant are packaged into small enough pieces in order to load in the browser.
+  Because of this, accuracy on the full models is much higher than the models publically available on SentiMeant.
+  If you would like to use SentiMeant algorithms for bigger and more complex tasks, email <a href="mailto:akhanrade@gmail.com">akhanrade@gmail.com for a quote.</a>
+</h2>
+<br>
+<div class="alert alert-info" role="alert">
+<h1>Thank you for your interest in SentiMeant! Feel free to contact me on email or twitter if you have any suggestions.</h1>
+</div>
 {% endblock %}
