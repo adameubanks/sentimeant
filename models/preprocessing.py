@@ -34,7 +34,7 @@ def clean_str(string):
     return string.strip().lower()
 
 #For turning long text into sentences to put into each model
-def sequence_text (text, max_len):
+def sequence_text (text, max_len=50):
     word_list = text.split(' ')
     filtered_word_list = word_list[:]
     for word in word_list:
