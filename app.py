@@ -1,6 +1,4 @@
-# from tensorflow.keras.preprocessing.text import Tokenizer, tokenizer_from_json
 from flask import Flask, render_template, request, redirect, url_for
-# from tensorflow.keras.preprocessing.sequence import pad_sequences
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from tensorflow.keras.models import load_model
 from models import preprocessing
@@ -10,9 +8,6 @@ import pandas as pd
 import numpy as np
 import json
 import re
-import urllib.request
-
-# download('vader_lexicon')
 
 app = Flask(__name__)
 
@@ -28,25 +23,20 @@ def howitworks():
 def about():
     return render_template('about.html')
 
+@app.route('/blog')
+def blog():
+    return render_template('blog.html')
+
 @app.route('/results', methods=['POST'])
 def results():
-    url = '' #request.form['url']
-    if url != "":
-        with urllib.request.urlopen(url) as address:
-            text = address.read().decode('utf-8')
-        text = re.sub(r'<.*?>', '', text)
-    else:
-        text = request.form['text']
-    # url = request.form['url']
+    text = request.form['text']
 
     max_len = 50
     text = preprocessing.clean_str(text)
     sentences = preprocessing.sequence_text(text, max_len)
 
-
     #get model type
     model = request.form['model_type']
-
 
     #set all params to 0
     negative=neutral=positive=compound=liberal=conservative=anger=fear=joy=love=sadness=surprise=toxicity=0
@@ -105,8 +95,6 @@ def results():
     return render_template('results.html', model=model, text=text, url=url, positive=positive, negative=negative, neutral=neutral, compound=compound,
                             conservative=conservative*100, liberal=liberal*100, anger=round(anger*100,1), fear=round(fear*100,1), joy=round(joy*100,1),
                              love=round(love*100,1), sadness=round(sadness*100,1), surprise=round(surprise*100,1), toxicity=round(toxicity*100,1))
-
-
 
 
 if __name__ == "__main__":
