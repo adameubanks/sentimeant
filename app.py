@@ -37,6 +37,7 @@ def results():
 
     #get model type
     model = request.form['model_type']
+    url = ''
 
     #set all params to 0
     negative=neutral=positive=compound=liberal=conservative=anger=fear=joy=love=sadness=surprise=toxicity=0
