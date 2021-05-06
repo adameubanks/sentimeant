@@ -1,5 +1,5 @@
 Flask==1.0
-Flask-Cors==3.0.3
+Flask-Cors==3.0.9
 gunicorn==19.9.0
 pandas==0.24.2
 nltk==3.4.5
