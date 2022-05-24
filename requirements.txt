@@ -3,4 +3,4 @@ Flask-Cors==3.0.3
 gunicorn==19.9.0
 pandas==0.24.2
 nltk==3.4.5
-tensorflow==2.0.1
+tensorflow==2.6.4
